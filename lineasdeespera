@@ -1,0 +1,45 @@
+---
+title: "Proyecto_Final_V1"
+author: "Mario Palacio"
+date: "2023-05-17"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r}
+library(queueing)
+```
+Problema: En una página web, tiene una sola sala de espera con capacidad para 20 personas para el acceso a la página para que no se sature. La llegada de los usuarios a la página sigue un proceso de llegada de Poisson con una tasa media de 5 usuarios por hora. El tiempo de servicio sigue una distribución exponencial con una media de 10 minutos por usuario. Sin embargo, la página tiene un servicio de usuarios VIP estos representan el 20% de los usuarios a los que se les brinda prioridad. Estos usuarios son atendidos de inmediato, sin importar si la sala de espera está llena. La página puede atender a un máximo de 6 usuarios por hora.
+
+Preguntas:
+
+1. ¿Cuál es la probabilidad de que un usuario que llega a la página web tenga que esperar en la sala de espera?
+
+2. ¿Cuál es la longitud media de la cola en la sala de espera?
+
+3. ¿Cuánto tiempo en promedio pasa un usuario en el sistema (incluyendo la espera en la sala de espera y el tiempo de servicio)?
+
+```{r}
+#Declaramos el sistema de colas usando los metodos proporcionados por el queueing
+sala_espera <- NewInput.MM1K(lambda = 5/60, mu = 4/60, k = 20)
+SE <- QueueingModel(sala_espera)
+
+```
+
+```{r}
+# Calcular la probabilidad de espera en la sala de espera
+prob_wait <- (C_erlang(c=1,5/4)*100)
+
+# Calcular la longitud media de la cola en la sala de espera
+mean_queue <- Lq(SE)
+# Calcular el tiempo medio en el sistema
+mean_time <- Lq(SE)+10 
+```
+
+```{r}
+cat("1. Probabilidad de espera:", prob_wait,"% \n")
+cat("2. Longitud media de la cola:", mean_queue, "Usuarios = 15 Usuarios\n")
+cat("3. Tiempo medio en el sistema:", mean_time, "Minutos = 25 Minutos\n")
+```
